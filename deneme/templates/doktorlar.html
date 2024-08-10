@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doktorlar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .doctor-info-card {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Doktor Paneli</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'doktorlar' %}">Ana Sayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'hasta_takip' %}">Hasta Takip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'rapor_takip' %}">Rapor Takip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'doktor_tibbi_rapor' %}">Rapor İşlemleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">Çıkış</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="doctor-info-card">
+            <h2>Hoşgeldin Dr. {{ doktor.Ad }} {{ doktor.Soyad }}</h2>
+            <p><strong>ID:</strong> {{ doktor.DoktorID }}</p>
+            <p><strong>Uzmanlık Alanı:</strong> {{ doktor.UzmanlikAlani }}</p>
+            <p><strong>Çalıştığı Hastane:</strong> {{ doktor.CalistigiHastane }}</p>
+            <p><strong>Kullanıcı Adı:</strong> {{ doktor.KullaniciAdi }}</p>
+            <p><strong>Şifre:</strong> {{ doktor.Sifre }}</p>
+        </div>
+        <form action="{% url 'doktor_bilgi_guncelle'%}" method="post">
+            {% csrf_token %}
+            <div class="doctor-info-card">
+                <h2>Doktor Bilgilerini Güncelle</h2>
+                <label for="adi">Ad:</label>
+                <input type="text" id="adi" name="adi" value="{{ doktor.Ad }}"><br>
+                <label for="soyadi">Soyad:</label>
+                <input type="text" id="soyadi" name="soyadi" value="{{ doktor.Soyad }}"><br>
+                <label for="uzmanlik_alani">Uzmanlık Alanı:</label>
+                <input type="text" id="uzmanlik_alani" name="uzmanlik_alani" value="{{ doktor.UzmanlikAlani }}"><br>
+                <label for="calistigi_hastane">Çalıştığı Hastane:</label>
+                <input type="text" id="calistigi_hastane" name="calistigi_hastane" value="{{ doktor.CalistigiHastane }}"><br>
+                <label for="kullanici_adi">Kullanıcı Adı:</label>
+                <input type="text" id="kullanici_adi" name="kullanici_adi" value="{{ doktor.KullaniciAdi }}"><br>
+                <label for="sifre">Şifre:</label>
+                <input type="text" id="sifre" name="sifre" value="{{ doktor.Sifre }}"><br>
+                <input type="hidden" name="doktor_id" value="{{ doktor.DoktorID }}">
+                <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+            </div>
+        </form>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

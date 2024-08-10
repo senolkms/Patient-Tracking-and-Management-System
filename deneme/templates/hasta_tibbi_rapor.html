@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tıbbi Rapor İşlemleri</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Tıbbi Rapor İşlemleri</h1>
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="POST" action="{% url 'hasta_rapor_ekle' %}" class="mb-3">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="date" name="rapor_tarihi" class="form-control" required placeholder="Rapor Tarihi">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="rapor_icerigi" class="form-control" required placeholder="Rapor İçeriği">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="hasta_id" class="form-control" required placeholder="Hasta ID">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="url" class="form-control" required placeholder="URL">
+            </div>
+            <button type="submit" class="btn btn-success">Rapor Ekle</button>
+        </form>
+        <form method="POST" action="{% url 'hasta_rapor_guncelle' %}" class="mb-3">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="rapor_id" class="form-control" required placeholder="Rapor ID">
+            </div>
+            <div class="mb-3">
+                <input type="date" name="rapor_tarihi" class="form-control" required placeholder="Yeni Rapor Tarihi">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="rapor_icerigi" class="form-control" required placeholder="Yeni Rapor İçeriği">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="hasta_id" class="form-control" required placeholder="Hasta ID">
+            </div>
+            <div class="mb-3">
+                <input type="text" name="url" class="form-control" required placeholder="Yeni URL">
+            </div>
+            <button type="submit" class="btn btn-primary">Rapor Güncelle</button>
+        </form>
+        <form method="POST" action="{% url 'rapor_sil' %}" class="mb-3">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="rapor_id" class="form-control" required placeholder="Rapor ID">
+            </div>
+            <button type="submit" class="btn btn-danger">Rapor Sil</button>
+        </form>
+        {% if raporlar %}
+            <h2 class="mt-4">Mevcut Raporlarınız</h2>
+            <div class="card">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for rapor in raporlar %}
+                            <li class="mb-2">
+                                <strong>Rapor ID:</strong> {{ rapor.RaporID }}, <strong>Tarih:</strong> {{ rapor.RaporTarihi }}
+                                <p class="card-text"><strong>İçerik:</strong> {{ rapor.RaporIcerigi }}</p>
+                                <a href="{{ rapor.URL }}" class="card-link" target="_blank">Rapor Linki</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <p>Hiç raporunuz bulunmamaktadır.</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'hastalar' %}" class="btn btn-primary">Geri Dön</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

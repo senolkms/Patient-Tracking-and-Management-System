@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <title>Randevu Takip</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <script>
+        $(document).ready(function(){
+            // Bugünün tarihini min olarak ayarla
+            var today = new Date().toISOString().split('T')[0];
+            $('#tarih').attr('min', today);
+
+            $('#uzmanlik_alani').change(function(){
+                var uzmanlik = $(this).val();
+                console.log("Selected Specialization: " + uzmanlik);
+                $.ajax({
+                    url: '{% url "doktorlari_getir" %}',
+                    data: {'uzmanlik': uzmanlik},
+                    success: function(data) {
+                        $('#doktor').empty();
+                        if (data.doktorlar && data.doktorlar.length > 0) {
+                            $.each(data.doktorlar, function(i, doktor) {
+                                $('#doktor').append($('<option>', {
+                                    value: doktor.id,
+                                    text: doktor.adi + ' ' + doktor.soyadi
+                                }));
+                            });
+                        } else {
+                            $('#doktor').append($('<option>', {
+                                value: '',
+                                text: 'Doktor bulunamadı'
+                            }));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error: " + status + " " + error);
+                    }
+                });
+            });
+
+            // Select2 initialize
+            $('#saat').select2({
+                minimumResultsForSearch: Infinity  // Arama kutusunu kaldır
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <form method="POST" action="{% url 'randevu_islem' %}" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="uzmanlik_alani" class="form-label">Uzmanlık Alanı:</label>
+                <select name="uzmanlik_alani" id="uzmanlik_alani" class="form-select" required>
+                    <option value="">Lütfen bir uzmanlık alanı seçiniz</option>
+                    {% for alan in uzmanlik_alanlari %}
+                        <option value="{{ alan }}">{{ alan }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="doktor" class="form-label">Doktor Seçiniz:</label>
+                <select name="doktor_id" id="doktor" class="form-select" required>
+                    <option value="">Lütfen bir doktor seçiniz</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tarih" class="form-label">Tarih:</label>
+                <input type="date" id="tarih" name="tarih" class="form-control" min="" required>
+            </div>
+            <div class="mb-3">
+                <label for="saat" class="form-label">Saat:</label>
+                <select id="saat" name="saat" class="form-select" required>
+                    <option value="">Lütfen bir saat seçiniz</option>
+                    <option value="09:00">09:00</option>
+                    <option value="09:15">09:15</option>
+                    <option value="09:30">09:30</option>
+                    <option value="09:45">09:45</option>
+                    <option value="10:00">10:00</option>
+                    <option value="10:15">10:15</option>
+                    <option value="10:30">10:30</option>
+                    <option value="10:45">10:45</option>
+                    <option value="11:00">11:00</option>
+                    <option value="11:15">11:15</option>
+                    <option value="11:30">11:30</option>
+                    <option value="11:45">11:45</option>
+                    <option value="12:00">12:00</option>
+                    <option value="12:15">12:15</option>
+                    <option value="12:30">12:30</option>
+                    <option value="12:45">12:45</option>
+                    <option value="13:00">13:00</option>
+                    <option value="13:15">13:15</option>
+                    <option value="13:30">13:30</option>
+                    <option value="13:45">13:45</option>
+                    <option value="14:00">14:00</option>
+                    <option value="14:15">14:15</option>
+                    <option value="14:30">14:30</option>
+                    <option value="14:45">14:45</option>
+                    <option value="15:00">15:00</option>
+                    <option value="15:15">15:15</option>
+                    <option value="15:30">15:30</option>
+                    <option value="15:45">15:45</option>
+                    <option value="16:00">16:00</option>
+                    <option value="16:15">16:15</option>
+                    <option value="16:30">16:30</option>
+                    <option value="16:45">16:45</option>
+                    <option value="17:00">17:00</option>
+                </select>
+            </div>
+            <button type="submit" id="randevu_kaydet" class="btn btn-primary">Randevu Kaydet</button>
+        </div>
+        <a href="{% url 'hastalar' %}" class="btn btn-primary mt-3">Geri Dön</a>
+        </form>
+    </div>
+</body>
+</html>
