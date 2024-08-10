@@ -1,7 +1,7 @@
 Hasta Takip ve Yönetim Sistemi: Bu proje, bir hastane yönetim sistemi olarak tasarlanmış
 bir web uygulamasıdır. Bu uygulama, hastaların kayıt oluşturabileceği, doktorlarla randevu
 alabileceği, tıbbi raporları saklayabileceği ve genel olarak sağlıkla ilgili işlemleri
-yönetebileceği bir platform sunması beklenmektedir.
+yönetebileceği bir platform sunması beklenmektedir. Python-Django dili kullanılmıştır.
 
 Veri Tabanı Tasarımı:
 Aşağıda veri tabanında bulunması gereken temel tablolar verilmiştir. Proje geliştirme
