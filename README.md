@@ -4,7 +4,7 @@ Bu proje, bir **hastane yönetim sistemi** olarak tasarlanmış bir **web uygula
 Hastalar **kayıt oluşturabilir**, **doktorlarla randevu alabilir**, **tıbbi raporlarını saklayabilir** ve sağlıkla ilgili işlemleri yönetebilir.  
 
 🛠 **Backend:** Python-Django  
-🗄 **Veritabanı:** MySQL 
+🗄 **Veritabanı:** MySQL  
 🎨 **Frontend:** HTML, CSS, JavaScript, Bootstrap  
 🔐 **Güvenlik:** HTTPS, Şifreleme, Yetkilendirme  
 
@@ -42,22 +42,6 @@ Hastalar **kayıt oluşturabilir**, **doktorlarla randevu alabilir**, **tıbbi r
 
 ## 📂 **Veritabanı Tasarımı**
 Bu proje ilişkisel bir veritabanı modeline sahiptir ve **normalizasyon kurallarına (1NF, 2NF, 3NF)** uygundur.
-
-### **🔹 Temel Tablolar**
-📌 **Hastalar Tablosu (`Patients`)**  
-- `HastaID (PK)`, `Ad`, `Soyad`, `Doğum Tarihi`, `Cinsiyet`, `Telefon Numarası`, `Adres`  
-
-📌 **Doktorlar Tablosu (`Doctors`)**  
-- `DoktorID (PK)`, `Ad`, `Soyad`, `Uzmanlık Alanı`, `Çalıştığı Hastane`  
-
-📌 **Randevular Tablosu (`Appointments`)**  
-- `RandevuID (PK)`, `HastaID (FK)`, `DoktorID (FK)`, `Randevu Tarihi`, `Randevu Saati`  
-
-📌 **Tıbbi Raporlar Tablosu (`MedicalReports`)**  
-- `RaporID (PK)`, `HastaID (FK)`, `DoktorID (FK)`, `Rapor Tarihi`, `Rapor İçeriği`, `Dosya URL`  
-
-📌 **Yöneticiler Tablosu (`Admins`)**  
-- `YoneticiID (PK)`, `Ad`, `Soyad`  
 
 ---
 
