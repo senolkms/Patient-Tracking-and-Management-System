@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hastalar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .welcome-message {
+            margin-bottom: 20px;
+        }
+        .randevu-listesi {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .cancel-btn {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+        }
+        .patient-info-card {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Hasta Paneli</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'hastalar' %}">Ana Sayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'randevu_islem' %}">Randevu işlemleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'hasta_tibbi_rapor' %}">Rapor İşlemleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">Çıkış</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="patient-info-card">
+            <h2>Hoşgeldin {{ hasta.Ad }} {{ hasta.Soyad }}</h2>
+            <p><strong>ID:</strong> {{ hasta.HastaID }}</p>
+            <p><strong>Dogum Tarihi:</strong> {{ hasta.DogumTarihi }}</p>
+            <p><strong>Adres:</strong> {{ hasta.Adres  }}</p>
+            <p><strong>Telefon:</strong> {{ hasta.Telefon }}</p>
+            <p><strong>Cinsiyet:</strong> {{ hasta.Cinsiyet }}</p>
+            <p><strong>Kullanıcı Adı:</strong> {{ hasta.KullaniciAdi }}</p>
+            <p><strong>Şifre:</strong> {{ hasta.Sifre }}</p>
+        </div>
+        <form action="{% url 'hasta_bilgi_guncelle'%}" method="post">
+            {% csrf_token %}
+            <div class="patient-info-card">
+                <h2>Hasta Bilgilerini Güncelle</h2>
+                <label for="adi">Ad:</label>
+                <input type="text" id="adi" name="adi" value="{{ hasta.Ad }}"><br>
+                <label for="soyadi">Soyad:</label>
+                <input type="text" id="soyadi" name="soyadi" value="{{ hasta.Soyad }}"><br>
+                <label for="telefon">Telefon:</label>
+                <input type="text" id="telefon" name="telefon" value="{{ hasta.Telefon }}"><br>
+                <label for="adres">Adres:</label>
+                <input type="text" id="adres" name="adres" value="{{ hasta.Adres }}"><br>
+                <label for="kullanici_adi">Kullanıcı Adı:</label>
+                <input type="text" id="kullanici_adi" name="kullanici_adi" value="{{ hasta.KullaniciAdi }}"><br>
+                <label for="sifre">Şifre:</label>
+                <input type="text" id="sifre" name="sifre" value="{{ hasta.Sifre }}"><br>
+                <input type="hidden" name="hasta_id" value="{{ hasta.HastaID }}">
+                <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+            </div>
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="randevu-listesi">
+            <h3>Randevularınız:</h3>
+            <ul class="list-group">
+                {% for randevu in randevular %}
+                    <li>
+                        {{ randevu.randevu_id }} - {{ randevu.tarih }} - {{ randevu.saat }} - {{"Dr."}}{{ randevu.doktor.Ad }} {{ randevu.doktor.Soyad }}
+                        {% if randevu %}
+                            <!-- Randevu İptal Formu -->
+                            <form action="{% url 'randevu_iptal' randevu.randevu_id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Randevuyu İptal Et</button>
+                            </form>
+                        {% else %}
+                            <p>Randevu ID mevcut değil, iptal edilemez.</p>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li>Hiç randevunuz bulunmamaktadır.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+</html>

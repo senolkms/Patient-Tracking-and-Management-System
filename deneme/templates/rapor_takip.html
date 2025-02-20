@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapor Takip</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Doktorun Gördüğü Raporu Olan Hastalar</h1>
+        {% if hastalar %}
+            <div class="list-group">
+                {% for hasta in hastalar %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hasta.Ad }} {{ hasta.Soyad }}</h5>
+                            {% for rapor in hasta.tibbi_raporlar.all %}
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">Rapor Tarihi: {{ rapor.RaporTarihi }}</h6>
+                                        <p class="card-text">İçerik: {{ rapor.RaporIcerigi }}</p>
+                                        <a href="{{ rapor.URL }}" class="card-link">Rapor Linki</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Raporu olan hasta bulunamadı.
+            </div>
+        {% endif %}
+        <a href="{% url 'doktorlar' %}" class="btn btn-primary mt-3">Geri Dön</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

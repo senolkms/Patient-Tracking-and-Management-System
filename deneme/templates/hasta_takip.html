@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doktorun Hastaları</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Doktorun Hastaları</h1>
+        <a href="{% url 'doktorlar' %}" class="btn btn-primary">Geri Dön</a>
+        {% if hastalar %}
+            <div class="list-group">
+                {% for hasta in hastalar %}
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ hasta.Ad }} {{ hasta.Soyad }}</h5>
+            <small>{{ hasta.DogumTarihi }}</small>
+        </div>
+        <p class="mb-1">Cinsiyet: {{ hasta.Cinsiyet }}</p>
+        <p class="mb-1">Telefon: {{ hasta.Telefon }}</p>
+        <p class="mb-1">Adres: {{ hasta.Adres }}</p>
+        <!-- Randevu bilgileri ekleniyor -->
+        <div class="mt-2">
+            <h6>Randevular:</h6>
+            {% if hasta.randevular %}
+                <ul>
+                {% for randevu in hasta.randevular %}
+                    <li>{{ randevu.tarih }} - {{ randevu.saat }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>Bu hastanın bu doktora ait randevusu yok.</p>
+            {% endif %}
+        </div>
+    </a>
+{% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Kayıtlı hasta bulunamadı.
+            </div>
+        {% endif %}
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
